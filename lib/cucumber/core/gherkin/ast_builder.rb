@@ -356,7 +356,27 @@ module Cucumber
           class ExampleRowBuilder < Builder
             def result(language, header, index)
               cells = attributes[:cells].map { |c| c[:value] }
+              if cells.length > 1
+                using_function_to_generate_examples = !(cells[0] =~ /^`.*`$/).nil?
+
+                if using_function_to_generate_examples
+                  function_str = cells[0].gsub!(/`(.*)`/, '\1') + "([], cells[1].to_s)"
+                  results = eval(function_str)
+                end
+              end
+
+              if results.kind_of? Array
+                i=1
+                out=nil
+                results.each do |cell|
+                  out = header.build_row(cell, index + i, location, language, comments)
+                  i=i+1
+                end
+                out
+
+              else
               header.build_row(cells, index + 1, location, language, comments)
+            end
             end
           end
         end
