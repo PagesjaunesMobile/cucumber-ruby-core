@@ -360,7 +360,7 @@ module Cucumber
                 using_function_to_generate_examples = !(cells[0] =~ /^`.*`$/).nil?
 
                 if using_function_to_generate_examples
-                  function_str = cells[0].gsub!(/`(.*)`/, '\1') + "([], cells[1].to_s)"
+                  function_str = cells[0].gsub!(/`(.*)`/, '\1') + "([], cells[1].to_s, cells[2].to_s)"
                   results = eval(function_str)
                 end
               end
